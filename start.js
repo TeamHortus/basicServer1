@@ -8,8 +8,13 @@ var bodyParser = require('body-parser');
 var app = express();
 var _ = require('lodash');
 var morgan = require('morgan');
+var http = require('http');
 
 var data = {};
+
+app.set('ip_address', process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '0.0.0.0'); //OPENSHIFT_NODEJS_IP = '127.0.0.1 and Heroku IP = '0.0.0.0'
+app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080); //var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+
 
 //data.key = value;
 
@@ -85,8 +90,13 @@ app.put('/data', function(req, res) {
 
 });
 
-app.listen(3000, function () {
+/*app.listen(port, function () {
   console.log('Example app listening on port 3000!')
-})
+}) */
 
+var server = http.createServer(app);
+
+server.listen(app.get('port'), app.get('ip_address'), function () {
+    console.log('Server ' + app.get('ip_address') + ' as Express server listening on port ' + app.get('port'));
+});
 
