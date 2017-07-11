@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var _ = require('lodash');
 var morgan = require('morgan');
-var http = require('http');
+var http = require('http'); //http 
 
 var data = {};
 
@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 
 //Any get request to slash run this function 
 app.get('/', function (req, res) {
-  res.send('Hi There, Team Hortus!')
+  res.send('Hi There, Welcome Team Hortus!')
 })
 
 app.get('/data', function (req, res) {
