@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 
 //Any get request to slash run this function 
 app.get('/', function (req, res) {
-  res.send('Hi There, Welcome Team Hortus!')
+  res.send('Hi There, Team Hortus!')
 })
 
 app.get('/data', function (req, res) {
