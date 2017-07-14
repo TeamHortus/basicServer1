@@ -23,9 +23,13 @@ app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-//data.led1 = 200;
-//data.led2 = 300;
-//data.led3 = 150;
+data.led1 = 200;
+data.led2 = 300;
+data.led3 = 150;
+data.fadeUpTime = 36000;
+data.fadeUpDuration = 7200;
+data.fadeDownTime = 62000;
+data.fadeDownDuration = 7200;
 
 //Any get request to slash run this function 
 app.get('/', function (req, res) {
