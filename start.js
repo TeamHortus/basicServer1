@@ -3,18 +3,41 @@
 //On the request, we have all tons of information about what is trying to access our server. 
 //The response gives us all types of ways to respond back to the client. 
 
+//db link - mongodb://root:root@ds157702.mlab.com:57702/teamhortusdb
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var _ = require('lodash');
 var morgan = require('morgan');
-var http = require('http'); //http 
+var http = require('http');
+var getData = require('./routes/getData');
+
+var mongoose = require('mongoose');
+var processEnv = process.env.IP || '0.0.0.0';
+var processPort = process.env.PORT || 8080;
 
 var data = {};
 
+//configure DB
+mongoose.Promise = global.Promise;
+
+var clientMongoDB =
+    process.env.MONGOLAB_URI ||
+    process.env.MONGOHQ_URL ||
+    "mongodb://root:root@ds157702.mlab.com:57702/teamhortusdb";
+
+
+mongoose.connect(clientMongoDB, function (err, res) {
+    if (err) {
+        console.log('Error at connecting DB ' + err);
+    } else {
+        console.log('DB Connection Successful to ' + clientMongoDB);
+    }
+});
+
 app.set('ip_address', process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '0.0.0.0'); //OPENSHIFT_NODEJS_IP = '127.0.0.1 and Heroku IP = '0.0.0.0'
 app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080); //var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
-
 
 //data.key = value;
 
@@ -23,22 +46,17 @@ app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-data.led1 = 200;
-data.led2 = 300;
-data.led3 = 150;
-data.fadeUpTime = 36000;
-data.fadeUpDuration = 7200;
-data.fadeDownTime = 62000;
-data.fadeDownDuration = 7200;
 
 //Any get request to slash run this function 
 app.get('/', function (req, res) {
-  res.send('Hi There, Team Hortus!')
+  res.send('Hi There, Team Hortus!');
 })
 
-app.get('/data', function (req, res) {
+app.get('/data', getData.list);
+
+/*app.get('/data', function (req, res) {
   res.json(data);
-})
+}) */
 
 app.post('/data', function (req, res) {
 	data.led1 = req.body.led1;
