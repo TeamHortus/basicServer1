@@ -20,12 +20,12 @@ var processPort = process.env.PORT || 8080;
 var data = {};
 
 //configure DB
-mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise; //to avoid conflict between mongo db promises
 
 var clientMongoDB =
     process.env.MONGOLAB_URI ||
     process.env.MONGOHQ_URL ||
-    "mongodb://root:root@ds157702.mlab.com:57702/teamhortusdb";
+    "mongodb://root:root@ds157702.mlab.com:57702/teamhortusdb"; // declared our mongo db url
 
 
 mongoose.connect(clientMongoDB, function (err, res) {
@@ -36,8 +36,8 @@ mongoose.connect(clientMongoDB, function (err, res) {
     }
 });
 
-app.set('ip_address', process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '0.0.0.0'); //OPENSHIFT_NODEJS_IP = '127.0.0.1 and Heroku IP = '0.0.0.0'
-app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080); //var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+app.set('ip_address', process.env.IP || '0.0.0.0'); //OPENSHIFT_NODEJS_IP = '127.0.0.1 and Heroku IP = '0.0.0.0'
+app.set('port', process.env.PORT || 8080); //var port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 
 //data.key = value;
 
@@ -54,9 +54,9 @@ app.get('/', function (req, res) {
 
 app.get('/data', getData.list);
 
-/*app.get('/data', function (req, res) {
+app.get('/data', function (req, res) {
   res.json(data);
-}) */
+}) 
 
 app.post('/data', function (req, res) {
 	data.led1 = req.body.led1;
