@@ -62,11 +62,13 @@ app.get('/', function (req, res) {
 
 app.get('/data', getData.list);
 
+app.post('/data', getData.add);
+
 app.get('/data', function (req, res) {
   res.json(data);
 }) 
 
-app.post('/data', function (req, res) {
+/*app.post('/data', function (req, res) {
 	data.led1 = req.body.led1;
 	data.led2 = req.body.led2;
 	data.led3 = req.body.led3;
@@ -75,7 +77,7 @@ app.post('/data', function (req, res) {
 	data.fadeDownTime = req.body.fadeDownTime;
 	data.fadeDownDuration = req.body.fadeDownDuration;
   res.json(data);
-})
+}) */
 
 app.put('/data', function(req, res) {
 	if(req.body.led1){
