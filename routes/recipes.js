@@ -1,6 +1,7 @@
 var recipes = require('../models/recipes');
 
 exports.list = function (req, res) {
+    
 
     Promise.resolve()
         .then(function () {

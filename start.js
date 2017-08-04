@@ -66,8 +66,8 @@ app.get('/data', getData.list);
 app.post('/data', getData.add);
 
 //all recipes
-
 app.get('/recipes', recipes.list);
+app.get('/recipes/:id', recipes.list);
 
 app.post('/recipes/add', recipes.add);
 
