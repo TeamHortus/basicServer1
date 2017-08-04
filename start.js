@@ -12,6 +12,7 @@ var _ = require('lodash');
 var morgan = require('morgan');
 var http = require('http');
 var getData = require('./routes/getData');
+var recipes = require('./routes/recipes');
 
 var mongoose = require('mongoose');
 var processEnv = process.env.IP || '0.0.0.0';
@@ -23,17 +24,17 @@ var data = {};
 mongoose.Promise = global.Promise; //to avoid conflict between mongo db promises
 
 var clientMongoDB =
-    process.env.MONGOLAB_URI ||
-    process.env.MONGOHQ_URL ||
-    "mongodb://root:root@ds157702.mlab.com:57702/teamhortusdb"; // declared our mongo db url
+	process.env.MONGOLAB_URI ||
+	process.env.MONGOHQ_URL ||
+	"mongodb://root:root@ds157702.mlab.com:57702/teamhortusdb"; // declared our mongo db url
 
 
 mongoose.connect(clientMongoDB, function (err, res) {
-    if (err) {
-        console.log('Error at connecting DB ' + err);
-    } else {
-        console.log('DB Connection Successful to ' + clientMongoDB);
-    }
+	if (err) {
+		console.log('Error at connecting DB ' + err);
+	} else {
+		console.log('DB Connection Successful to ' + clientMongoDB);
+	}
 });
 
 app.set('ip_address', process.env.IP || '0.0.0.0'); //OPENSHIFT_NODEJS_IP = '127.0.0.1 and Heroku IP = '0.0.0.0'
@@ -43,30 +44,39 @@ app.set('port', process.env.PORT || 8080); //var port = process.env.OPENSHIFT_NO
 
 app.use(morgan('dev'))
 //app.use(express.static('client'));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://teamhortuswebsite.herokuapp.com');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
+	res.setHeader('Access-Control-Allow-Origin', 'https://teamhortuswebsite.herokuapp.com');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	next();
 });
 
 
 //Any get request to slash run this function 
 app.get('/', function (req, res) {
-  res.send('Hi There, Team Hortus!');
+	res.send('Hi There, Team Hortus!');
 })
 
 app.get('/data', getData.list);
 
 app.post('/data', getData.add);
 
+//all recipes
+
+app.get('/recipes', recipes.list);
+
+app.post('/recipes/add', recipes.add);
+
+app.post('/recipes/update', recipes.update);
+app.post('/recipes/delete', recipes.delete);
+
 app.get('/data', function (req, res) {
-  res.json(data);
-}) 
+	res.json(data);
+})
 
 /*app.post('/data', function (req, res) {
 	data.led1 = req.body.led1;
@@ -79,46 +89,46 @@ app.get('/data', function (req, res) {
   res.json(data);
 }) */
 
-app.put('/data', function(req, res) {
-	if(req.body.led1){
+app.put('/data', function (req, res) {
+	if (req.body.led1) {
 		data.led1 = req.body.led1;
-	} else{
+	} else {
 		data.led1 = data.led1;
 	}
-	if(req.body.led2){
+	if (req.body.led2) {
 		data.led2 = req.body.led2;
-	} else{
+	} else {
 		data.led2 = data.led2;
 	}
-	if(req.body.led3){
+	if (req.body.led3) {
 		data.led3 = req.body.led3;
-	} else{
+	} else {
 		data.led3 = data.led3;
 	}
-	if(req.body.fadeUpTime){
+	if (req.body.fadeUpTime) {
 		data.fadeUpTime = req.body.fadeUpTime;
-	} else{
+	} else {
 		data.fadeUpTime = data.fadeUpTime;
 	}
-	if(req.body.fadeUpDuration){
+	if (req.body.fadeUpDuration) {
 		data.fadeUpDuration = req.body.fadeUpDuration;
-	} else{
+	} else {
 		data.fadeUpDuration = data.fadeUpDuration;
 	}
-	if(req.body.fadeDownTime){
+	if (req.body.fadeDownTime) {
 		data.fadeDownTime = req.body.fadeDownTime;
-	} else{
+	} else {
 		data.fadeDownTime = data.fadeDownTime;
 	}
-	if(req.body.fadeDownDuration){
+	if (req.body.fadeDownDuration) {
 		data.fadeDownDuration = req.body.fadeDownDuration;
-	} else{
+	} else {
 		data.fadeDownDuration = data.fadeDownDuration;
 	}
-  // data.led1 = req.body.led1;
-   //data.led2 = req.body.led2;
-   //data.led3 = req.body.led3;
-   res.json(data)
+	// data.led1 = req.body.led1;
+	//data.led2 = req.body.led2;
+	//data.led3 = req.body.led3;
+	res.json(data)
 
 });
 
@@ -129,6 +139,6 @@ app.put('/data', function(req, res) {
 var server = http.createServer(app);
 
 server.listen(app.get('port'), app.get('ip_address'), function () {
-    console.log('Server ' + app.get('ip_address') + ' as Express server listening on port ' + app.get('port'));
+	console.log('Server ' + app.get('ip_address') + ' as Express server listening on port ' + app.get('port'));
 });
 
