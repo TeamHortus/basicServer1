@@ -1,11 +1,15 @@
 var recipes = require('../models/recipes');
 
 exports.list = function (req, res) {
-    
+    var id = req.query.id || req.params.id;
 
     Promise.resolve()
         .then(function () {
-            return recipes.find();
+            if (id) {
+                return recipes.findById(id);
+            } else {
+                return recipes.find();
+            }
         })
         .then(function (data) {
             if (data) {
