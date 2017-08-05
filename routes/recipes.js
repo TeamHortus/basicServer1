@@ -78,7 +78,7 @@ exports.delete = function (req, res) {
 
     Promise.resolve()
         .then(function () {
-            return recipes.findByIdAndRemove(postData.id)
+            return recipes.findByIdAndRemove(postData._id)
         })
         .then(function (recipeDataUpdate) {
             res.json({ status: "OK" });
