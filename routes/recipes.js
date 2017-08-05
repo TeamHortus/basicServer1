@@ -63,7 +63,7 @@ exports.update = function (req, res) {
 
     Promise.resolve()
         .then(function () {
-            return recipes.findByIdAndUpdate(postData.id, entry);
+            return recipes.findByIdAndUpdate(postData._id, entry);
         })
         .then(function (recipeDataUpdate) {
             res.json({ status: "OK" });
